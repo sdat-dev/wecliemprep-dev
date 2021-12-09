@@ -1,6 +1,7 @@
-let sidemenuItems = [{"item":"ABOUT","link":"about.html"},{"item":"ACADEMIC FOUNDERS","link":"academicfounders.html"},{"item":"LEADERSHIP TEAM","link":"leadershipteam.html"},{"item":"RESEARCHERS","link":"researchers.html"},{"item":"INDUSTRY MEMBERS","link":"industrymembers.html"},{"item":"PRIORITIES","link":"priorities.html"},{"item":"FALL 2021 WORKSHOP","link":"fall2021workshop.html"}]
+let sidemenuItems = [{"item":"About","link":"about.html"},{"item":"Academic Founders","link":"academicfounders.html"},{"item":"Leadership Team","link":"leadershipteam.html"},{"item":"Funder Toolkit","link":"fundertoolkit.html","subItems":[{"item":"Funding Opportunity","link":"fundingopportunity.html"},{"item":"Proposal Preparation","link":"proposalpreparation.html"},{"item":"Library Resources","link":"libraryresources.html"},{"item":"Video Resources","link":"videoresources.html"},{"item":"Talk to a Program Officer","link":"talktoaprogramofficer.html"}]},{"item":"Researchers","link":"researchers.html"},{"item":"Industry Members","link":"industrymembers.html"},{"item":"Priorities","link":"priorities.html"},{"item":"Fall 2021 Workshop","link":"fall2021workshop.html"}]
 //SideMenu Start
 //What evet written  before '//SideMenu Start' will be relace with sidemenuItems in automation scripts
+
 
 let addsidemenu = function (page, markactive = true, extraindirection = false) {
     let sidemenu = document.getElementById('side-menu');
