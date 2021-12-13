@@ -29,7 +29,7 @@ let addSpinData = function () {
         columns: ["synopsis", "id", "spon_name", "NextDeadlineDate", "total_funding_limit", "programurl", "sponsor_type", "prog_title", "revision_date", "deadline_note"],
         isCrossDomain: true,
         callback: 'parseData',
-        keywords: '[SOLR]keyword_exact:"Health Disparities"',
+        keywords: '[SOLR]keyword_exact:"Emergency Health Services" OR keyword_exact:"Climate Change" OR keyword_exact:"Weather Modification" OR keyword_exact:"Classification of Climate" OR keyword_exact:"Emergency Preparedness" OR keyword_exact:"Climate Change - Impacts" OR keyword_exact:"Climate Change - Mitigation" OR keyword_exact:"Emergency Medicine" OR keyword_exact:"Emergency Response" OR keyword_exact:"Emergency Services (Food/Shelter/Water, Etc.)" OR keyword_exact:"Extreme/Severe Weather" OR keyword_exact:"Weather"',
         uniqueId: '801E4DCB-736C-4601-B'
     };
 
@@ -46,33 +46,39 @@ let addSpinData = function () {
 }
 
 
-function getAccordiationData(p) {
+function getAccordiationData(funding_data) {
 
     let results = false;
     //getting content Element to append grants information 
-    var covid_data = p;
-    let distinctCategories = ['NIH', 'NSF', 'Federal - Others', 'Others'];
-    let FederalsubCategories = ['Federal - All CDC', 'Federal - All HHS', 'Federal - All DoD', 'Federal - All DoE'];
+    let distinctCategories = ['NSF','NOAA','NIH','DOE','NASA','Federal - Others','Others'];
     let content = '<div class="panel-group" id = "accordion-ops" role="tablist" aria-multiselectable="true">';
     let counter = 1;
 
     for (var k = 0; k < distinctCategories.length; k++) {
         var NSF_arr = [];
+        var NOAA_arr = [];
         var NIH_arr = [];
+        var DOE_arr = [];
+        var NASA_arr = [];
         var federal_arr = [];
-
         var others = [];
         var length = 0;
         var img_url = "";
         var arr = [];
-        for (var j = 0; j < covid_data.Programs.length; j++) {
-            var programs_value = covid_data.Programs[j];
+        for (var j = 0; j < funding_data.Programs.length; j++) {
+            var programs_value = funding_data.Programs[j];
 
             if (programs_value.spon_name.includes('NSF') ||
                 programs_value.spon_name.includes('National Science Foundation') ||
                 programs_value.spon_name === "Directorate for Engineering/NSF"
             ) {
                 NSF_arr.push(programs_value);
+            }
+            else if (programs_value.spon_name.includes('NOAA') ||
+                     programs_value.spon_name.includes('National Oceanic & Atmospheric Administration/Department of Commerce')
+              ) {
+                NOAA_arr.push(programs_value);
+
             }
             else if (programs_value.spon_name.includes('NIH') ||
                 programs_value.spon_name.includes('DHHS')
@@ -82,9 +88,22 @@ function getAccordiationData(p) {
                 NIH_arr.push(programs_value);
 
             }
+            else if (programs_value.spon_name.includes('DOE') ||
+            programs_value.spon_name.includes('Office of Science/Department of Energy')
+            ) {
+                DOE_arr.push(programs_value);
+            }
+            else if (programs_value.spon_name.includes('NASA') ||
+            programs_value.spon_name.includes('National Aeronautics & Space Administration')
+            ) {
+                NASA_arr.push(programs_value);
+            }
             else if (distinctCategories[k] == 'Federal - Others') {
                 if (programs_value.sponsor_type == 'US Federal' && !programs_value.spon_name.includes('DHHS') &&
-                    !programs_value.spon_name.includes('NIH') && !programs_value.spon_name.includes('NSF')) {
+                    !programs_value.spon_name.includes('NIH') && !programs_value.spon_name.includes('NSF') &&
+                    !programs_value.spon_name.includes('National Oceanic & Atmospheric Administration/Department of Commerce') && 
+                    !programs_value.spon_name.includes('Office of Science/Department of Energy')&&
+                    !programs_value.spon_name.includes('National Aeronautics & Space Administration')) {
                     federal_arr.push(programs_value);
                 }
             }
@@ -107,10 +126,31 @@ function getAccordiationData(p) {
             img_url = "assets/logos-funding-opportunities/nsf.png";
         }
 
+        if (distinctCategories[k] == 'NOAA') {
+            length = NOAA_arr.length;
+            arr = NOAA_arr;
+            img_url = "assets/logos-funding-opportunities/noaa_logo.png";
+
+
+        }
         if (distinctCategories[k] == 'NIH') {
             length = NIH_arr.length;
             arr = NIH_arr;
             img_url = "assets/logos-funding-opportunities/NIH-logo.png";
+
+
+        }
+        if (distinctCategories[k] == 'DOE') {
+            length = DOE_arr.length;
+            arr = DOE_arr;
+            img_url = "assets/logos-funding-opportunities/doe.png";
+
+
+        }
+        if (distinctCategories[k] == 'NASA') {
+            length = NASA_arr.length;
+            arr = NASA_arr;
+            img_url = "assets/logos-funding-opportunities/nasa.png";
 
 
         }
