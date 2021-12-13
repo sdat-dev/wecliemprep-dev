@@ -12,7 +12,7 @@ window.onload = function () {
         content += '<input id = "search-box" placeholder = "Search Researchers...">'+
                     '<button id = "search-button" type = "submit"><i class="fa fa-search"></i></button>'+
                 '<br><span id = "search-box-results"></span>';
-        content +='<div id="experts-content">'+buildResearchersContent(researchers)+'</div>';
+        content +='<div id="experts-content">'+ buildUniversityResearchers("tab1",researchers)+'</div>';
         let contentElement = document.createElement('div');
         contentElement.classList.add('content');
         contentElement.innerHTML = content.trim();
@@ -133,96 +133,6 @@ let buildUniversityResearcherElements = function(researchers){
         getResearchInterests(researcher) + '</p><p>' + researcher.ResearchExpertise +'</p>'+ generateProjectsContent([researcher["Project1"],researcher["Project2"],researcher["Project3"],researcher["Project4"],researcher["Project5"]])+
         generateRelevantCourses([researcher["Course1"],researcher["Course2"],researcher["Course3"],researcher["Course4"],researcher["Course5"]]) + '</div>';
     }
-    return content;
-}
-
-let buildOtherResearchers = function(tabId, tabresearchers){
-    let contactElem = '';
-    contactElem += '<div class="panel-group" id = "' + tabId + '" role="tablist" aria-multiselectable="true">';
-    let distinctLevel1s = getDistinctOrganizations(tabresearchers);
-    distinctLevel1s.sort();
-    var index = distinctLevel1s.indexOf("");
-    if(index != -1)
-    {
-        distinctLevel1s.splice(index, 1);
-        distinctLevel1s.push("");
-    }
-    
-    distinctLevel1s.forEach(function(level1) {
-        let collapseId1 = "collapse" + counter;
-        let headerId1 = "heading" + counter;
-        let childId1 = "child" + counter;
-        counter++;
-        let level2Elem = '';
-        //filter level2s
-        let level2s = tabresearchers.filter(function(researcher){
-            return (researcher.UniversityInstitution == "") ? "Other" == level1 : 
-                                                               researcher.UniversityInstitution == level1;
-        }); 
-        if(level2s.length > 0)
-        {
-            let distinctLevel2s = getDistinctDivisions(level2s);
-            distinctLevel2s.sort();
-            distinctLevel2s.forEach(function(level2){
-                //filter level3 
-                let level3s = level2s.filter(function(researcher){
-                    return (researcher["DepartmentUnitOffice"] == "") ? "Other" : researcher.DepartmentUnitOffice == level2;
-                });
-                level3s.sort((a,b) => b.firstName - a.firstName)
-                //for level2s build simple list
-                level2Elem+= buildOtherResearcherElements(level3s);
-            });
-        } 
-
-        if(level1 == "")
-        {
-            level1 = "Other";
-        }
-
-        contactElem+= generateAccordionElem(1, collapseId1, headerId1, tabId, childId1, level1, level2Elem);
-    });
-    contactElem += '</div>';
-    //end level1 accordion
-    return contactElem;
-}
-
-let getDistinctOrganizations = function(researchers){
-    let mappedAttributes = researchers.map(function(researcher){
-        return  (researcher["UniversityInstitution"] == "") ? "Other" : researcher["UniversityInstitution"];
-    });
-    let distinctOrganizations = mappedAttributes.filter(function(v, i, a){
-        return a.indexOf(v) === i;
-     });
-
-    return distinctOrganizations;
-}
-
-let getDistinctDivisions = function(researchers){
-    let mappedAttributes = researchers.map(function(researcher){
-        return  (researcher.DepartmentUnitOffice == "") ? "Other" : researcher.DepartmentUnitOffice;
-    });
-    let distinctDivisions = mappedAttributes.filter(function(v, i, a){
-        return a.indexOf(v) === i;
-     });
-
-    return distinctDivisions;
-}
-
-let buildOtherResearcherElements = function(researchers){
-    let content = '';
-    for(var i=0; i< researchers.length; i++){
-        if(researchers[i].FirstName == "") //skip of there is no first name
-            continue;
-        let researcher = researchers[i];
-        content +='<div class = "search-container expert-info">'+
-        '<img class = "expert-image" src = "https://sdat-dev.github.io/resources/wiser/assets/images/researchers/' + researcher.Photo +'"/>'+
-        '<h2 class = "content-header-no-margin">'+ (researcher["UniversityInstitutionalPage"] == ""? researcher.FirstName + ' '+ researcher.LastName : '<a class = "no-link-decoration" href = ' + getHttpLink(researcher["UniversityInstitutionalPage"]) + '>' + researcher.FirstName + ' '+ researcher.LastName + '</a>') + '</h2>'+
-        '<h5 class = "content-header-no-margin faculty-title" style = "font-size:20px;">'+ (researcher.JobTitle != ''? researcher.JobTitle + ',<br>':'') + (researcher.DepartmentUnitOffice != ''? researcher.DepartmentUnitOffice :'') + '</h5>' +
-        generateLogoContent(researcher) +'<p class = "faculty-description"><strong>Email: </strong> <a class = "email-link" href = mailto:' + researcher.Email + 
-        '>'+ researcher.Email + '</a><br>'+ (researcher.PhoneNumber != ""? '<strong>Phone: </strong>'+ formatPhone(researcher.PhoneNumber) + '<br>': "")+'<strong>Research Interests: </strong>'+ 
-        getResearchInterests(researcher) + '</p><p>' + researcher.ResearchExpertise +'</p>'+ generateProjectsContent([researcher["Project1"],researcher["Project2"],researcher["Project3"],researcher["Project4"],researcher["Project5"]])+
-        generateRelevantCourses([researcher["Course1"],researcher["Course2"],researcher["Course3"],researcher["Course4"],researcher["Course5"]])+ '</div>';;
-   }
     return content;
 }
 
