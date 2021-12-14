@@ -28,41 +28,6 @@ window.onload = function () {
     })
 }
 
-let buildResearchersContent = function(experts){
-    let content = '';
-    let universityResearchers = experts.filter(function(expert){
-        return (expert["UniversityInstitution"] == "UAlbany") || (expert["UniversityInstitution"] == "UConn");
-    });
-    let otherResearchers = experts.filter(function(expert){
-        return (expert["UniversityInstitution"] != "UAlbany") && (expert["UniversityInstitution"] != "UConn");
-    });
-    let tabattribute = "UniversityInstitution"
-    let distincttabs = getDistinctAttributes(universityResearchers, 'UniversityInstitution'); 
-    distincttabs.push("Other Organizations");
-    content = createTabNavigation(distincttabs, tabattribute);
-    let tabContent = [];
-    for(let i = 0; i< distincttabs.length; i++){
-        let tabexperts = universityResearchers.filter(function(expert){
-            return expert.UniversityInstitution == distincttabs[i];
-        });
-        let tabId = "";
-        if(distincttabs[i] != "Other Organizations")
-        {
-            tabId = tabattribute + i.toString();
-            tabContent.push(buildUniversityResearchers(tabId, tabexperts));
-        }
-        else
-        {
-            tabId = tabattribute + i.toString();
-            tabContent.push(buildOtherResearchers(tabId, otherResearchers));
-        }
-        
-    }
-
-    content += buildTabContent(distincttabs, tabattribute, tabContent);
-    return content;
-}
-
 //Start with level1 accordion and build one by one the levels going down.
 //this is nestted accordion that can go upto 4 levels
 let counter = 1;
@@ -110,6 +75,7 @@ let buildUniversityResearchers = function(tabId, tabexperts){
         {
             level1 = "Other";
         }
+        level1 += '<span class="noofresearchers"></span>';
         contactElem+= generateAccordionElem(1, collapseId1, headerId1, tabId, childId1, level1, level2Elem);
     });
     contactElem +=      '</div>'+
@@ -193,12 +159,12 @@ let generateRelevantCourses = function(courses){
     return courseContent;
 }
 
-//Search Function
+// Search Function
 searchfunction = function () {
     //getting search-box Element
     let searchbox = document.getElementById('search-box');
     let searchtext = searchbox.value.trim();
-    let tabs =  document.getElementsByClassName('tab-pane');
+    //let tabs =  document.getElementsByClassName('tab-pane');
     //getting individual content withing sub-accordions to toggle display
     let panels = document.getElementsByClassName('panel');
     let searchElems = document.getElementsByClassName('search-container');
@@ -219,22 +185,22 @@ searchfunction = function () {
     {
         let modifiedsearchtext = searchtext.replace(/\s+/g, '').toLowerCase();
 
-        for(let i=0; i < tabs.length; i++){
-            let tabpanels = tabs[i].getElementsByClassName('panel');
+        
+        for(let i=0; i< panels.length; i++){
             let count = 0;
-            for(let j=0; j< tabpanels.length; j++){
-                let searchElems = tabpanels[j].getElementsByClassName('search-container');
-                for (let k = 0; k < searchElems.length; k++) {
-                    if (searchElems[k].textContent.replace(/\s+/g, '').toLowerCase().indexOf(modifiedsearchtext) >= 0) {
-                        count++;
-                        searchElems[k].style.display = "block";
-                        tabpanels[j].style.display = "block";
-                    }
+            let searchElems = panels[i].getElementsByClassName('search-container');
+            for (let j = 0; j < searchElems.length; j++) {
+                if (searchElems[j].textContent.replace(/\s+/g, '').toLowerCase().indexOf(modifiedsearchtext) >= 0) {
+                    count++;
+                    searchElems[j].style.display = "block";
                 }
             }
-            let tabid = tabs[i].getAttribute("Id");
-            let tabpill = document.getElementById('#'+tabid);
-            tabpill.innerText = tabpill.innerText + ' (' + count + ')';
+            if(count > 0)
+            {
+                let solicount = panels[i].getElementsByClassName("noofresearchers");
+                solicount[0].innerText = " ("+count+")";
+                panels[i].style.display = "block";
+            }
         }
     }
     else{
@@ -243,30 +209,20 @@ searchfunction = function () {
     } 
 }
 
-let clearsearch = function(){
-    let tabs =  document.getElementsByClassName('tab-pane');
-    let panels = document.getElementsByClassName('panel');
-    let searchElems = document.getElementsByClassName('search-container');
-    for(let i=0; i < tabs.length; i++){
-        let tabid = tabs[i].getAttribute("Id");
-        let tabpill = document.getElementById('#'+tabid);
-        let tabtext = tabpill.innerText;
-        let pos = tabtext.indexOf("(");
-        if(pos != -1)
-        {
-            tabpill.innerText = tabtext.substring(0, pos-1);
-        }
-    }
 
+let clearsearch = function(){
+    let panels = document.getElementsByClassName('panel');
     if (panels.length > 0) {
         for (let i = 0; i < panels.length; i++) {
+            let searchElems = panels[i].getElementsByClassName('search-container');
+            if (searchElems.length > 0) {
+                for (let i = 0; i < searchElems.length; i++) {
+                    searchElems[i].style.display = "block";
+                }
+            }
+            let solicount = panels[i].getElementsByClassName("noofresearchers");
+            solicount[0].innerText = "";
             panels[i].style.display = "block";
-        }
-    }
-
-    if (searchElems.length > 0) {
-        for (let i = 0; i < searchElems.length; i++) {
-            searchElems[i].style.display = "block";
         }
     }
 }
