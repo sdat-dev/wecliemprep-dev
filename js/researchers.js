@@ -38,11 +38,6 @@ let buildUniversityResearchers = function(tabId, tabexperts){
     contactElem +=  '<div class = "accordion-container">'+
                         '<div class="panel-group" id = "' + tabId + '" role="tablist" aria-multiselectable="true">';
     let distinctLevel1s = getDistinctAttributes(tabexperts, 'UAlbanyCollegeSchoolDivision');
-    // for (i=0;i<distinctLevel1s.length;i++) {
-    //     let temp = "";
-    //     temp = distinctLevel1s[i].Value;
-    //     distinctLevel1s[i] = temp;
-    // };
     distinctLevel1s.sort();
     var index = distinctLevel1s.indexOf("");
     if(index != -1)
