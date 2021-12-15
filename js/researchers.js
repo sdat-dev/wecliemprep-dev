@@ -1,8 +1,8 @@
 window.onload = function () {
-    // let requestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/researchers.json"; 
-    // let datarequestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/researchersdata.json"; 
-    let requestURL = "../data/researchers.json"; 
-    let datarequestURL = "../data/researchersdata.json"; 
+    let requestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/researchers.json"; 
+    let datarequestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/researchersdata.json"; 
+    // let requestURL = "../data/researchers.json"; 
+    // let datarequestURL = "../data/researchersdata.json"; 
     let request =  axios.get(requestURL);
     let datarequest =  axios.get(datarequestURL);
     let maincontentContainer = document.getElementsByClassName('main-content')[0];
@@ -38,11 +38,11 @@ let buildUniversityResearchers = function(tabId, tabexperts){
     contactElem +=  '<div class = "accordion-container">'+
                         '<div class="panel-group" id = "' + tabId + '" role="tablist" aria-multiselectable="true">';
     let distinctLevel1s = getDistinctAttributes(tabexperts, 'UAlbanyCollegeSchoolDivision');
-    for (i=0;i<distinctLevel1s.length;i++) {
-        let temp = "";
-        temp = distinctLevel1s[i].Value;
-        distinctLevel1s[i] = temp;
-    };
+    // for (i=0;i<distinctLevel1s.length;i++) {
+    //     let temp = "";
+    //     temp = distinctLevel1s[i].Value;
+    //     distinctLevel1s[i] = temp;
+    // };
     distinctLevel1s.sort();
     var index = distinctLevel1s.indexOf("");
     if(index != -1)
@@ -58,7 +58,7 @@ let buildUniversityResearchers = function(tabId, tabexperts){
         let level2Elem = '';
         //filter level2s
         let level2s = tabexperts.filter(function(expert){
-            return expert.UAlbanyCollegeSchoolDivision.Value == level1;
+            return expert.UAlbanyCollegeSchoolDivision == level1;
         }); 
 
         if(level2s.length > 0)
