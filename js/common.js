@@ -208,9 +208,9 @@ let getContent = function (webelements){
         }
         else if (type == 'img') {
             if (element.hasOwnProperty('style'))
-                content += '<img src="https://sdat-dev.github.io/resources/wecliemprep-dev/assets/images/' + element.content + '" alt="" style="' + element.style + '">';
+                content += '<img src="https://sdat-dev.github.io/resources/wiser/assets/images/' + element.content + '" alt="" style="' + element.style + '">';
             else
-                content += '<img src="https://sdat-dev.github.io/resources/wecliemprep-dev/assets/images/' + element.content + '" alt="" style="width: 100%;">';
+                content += '<img src="https://sdat-dev.github.io/resources/wiser/assets/images/' + element.content + '" alt="" style="width: 100%;">';
         }
         else if (type == 'iframe') {
             content += '<iframe ' + element.content + '></iframe>';
@@ -238,7 +238,7 @@ let getContent = function (webelements){
             content += '<div class = "col-xl-4 col-lg-4 col-md-4">' +
                 '<a target = "_blank" href = "' + element.source + '">' +
                 '<div class = "home-logo-container">' +
-                '<img class = "home-logo" src = "https://sdat-dev.github.io/resources/wecliemprep-dev/assets/images/' + element.logo + '">' +
+                '<img class = "home-logo" src = "https://sdat-dev.github.io/resources/wiser/assets/images/' + element.logo + '">' +
                 '<p>' + element.content + '</p>' +
                 '</div>' +
                 '</a>' +
@@ -249,7 +249,7 @@ let getContent = function (webelements){
         }
         else if (type == 'a' && element.hasOwnProperty("style") && element.logo != '') {
             content += '<a target = "_blank" href = "' + element.source + '">' +
-                '<img  img-fluid style="' + element.style + '" src = "https://sdat-dev.github.io/resources/wecliemprep-dev/assets/images/' + element.logo + '">';
+                '<img  img-fluid style="' + element.style + '" src = "https://sdat-dev.github.io/resources/wiser/assets/images/' + element.logo + '">';
                 if(element.content != '')
                 {
                     content += '<p>' + element.content + '</p>';
@@ -280,7 +280,7 @@ let addheader = function (headers) {
         image = typeof headers[i].logo != 'undefined' && headers[i].logo != '' ? headers[i].logo : image;
         header1 = typeof headers[i].content != 'undefined' && headers[i].content != '' ? headers[i].content : header1;
         header2 = typeof headers[i].subcontent != 'undefined' && headers[i].subcontent != '' ? headers[i].subcontent : header2;
-        let source = 'https://sdat-dev.github.io/resources/wecliemprep-dev/assets/images/headers/' + (typeof headers[i].source != 'undefined' && headers[i].source != '' ? headers[i].source + '/' : '');
+        let source = 'https://sdat-dev.github.io/resources/wiser/assets/images/headers/' + (typeof headers[i].source != 'undefined' && headers[i].source != '' ? headers[i].source + '/' : '');
         if (i == 0) {
             content += '<div class="item active">';
         }
@@ -323,7 +323,7 @@ addfooter = function (relativepath = ".") {
                                 '<div class="col-12 col-sm-offset-0 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">'+
                                     '<a target="_blank" href="https://www.albany.edu/">'+
                                         '<img alt="University at Albany Logo" class=" img-responsive footer-logo" height="39"'+
-                                        'src="https://sdat-dev.github.io/resources/wecliemprep-dev/assets/images/UAlbany-logo.png" typeof="Image" />'+
+                                        'src="https://sdat-dev.github.io/resources/wiser/assets/images/UAlbany-logo.png" typeof="Image" />'+
                                     '</a>'+
                                     '<p>'+
                                         '<a target="_blank" href="https://www.facebook.com/universityatalbany"><span class="fab fa-facebook-f footer-icon" role="img"'+
