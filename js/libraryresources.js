@@ -1,5 +1,5 @@
-let requestURL = "data/libraryresources.json";
-let datarequestURL = "data/libraryresourcesdata.json";
+let requestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/libraryresources.json";
+let datarequestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/libraryresourcesdata.json";
 let request = axios.get(requestURL);
 let datarequest = axios.get(datarequestURL);
 axios.all([request, datarequest]).then(axios.spread((...responses) => {

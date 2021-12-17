@@ -1,5 +1,5 @@
-let requestURL = "data/talktoaprogramofficer.json";
-let datarequestURL = "data/talktoaprogramofficerdata.json";
+let requestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/talktoaprogramofficer.json";
+let datarequestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/talktoaprogramofficerdata.json";
 let request = axios.get(requestURL);
 let datarequest = axios.get(datarequestURL);
 axios.all([request, datarequest]).then(axios.spread((...responses) => {

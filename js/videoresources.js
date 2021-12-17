@@ -1,5 +1,5 @@
-let requestURL = "data/videoresources.json";
-let datarequestURL = "data/videoresourcesdata.json";
+let requestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/videoresources.json";
+let datarequestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/videoresourcesdata.json";
 let request = axios.get(requestURL);
 let datarequest = axios.get(datarequestURL);
 axios.all([request, datarequest]).then(axios.spread((...responses) => {
