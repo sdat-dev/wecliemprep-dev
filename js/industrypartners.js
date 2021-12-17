@@ -1,4 +1,4 @@
-let requestURL = "https://sdat-dev.github.io/resources/wiser/data/industrypartners.json";
+let requestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/industrypartners.json";
 let request = new XMLHttpRequest();
 //getting content Element to append grants information
 let maincontentContainer = document.getElementsByClassName('main-content')[0];
