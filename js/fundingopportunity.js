@@ -45,6 +45,52 @@ let addSpinData = function () {
     });
 }
 
+function setNoOfSoils(arr) {
+    let a = [{day: 'numeric'}, {month: 'short'}, {year: 'numeric'}];
+    var today = join(new Date, a, '-');
+    var count = 0;
+    var dueDate = "";
+    var deadlineDate = "";
+    for(i=0;i<=arr.length;i++){
+        if (arr[i] != undefined && arr[i].NextDeadlineDate != null){
+            if (arr[i].NextDeadlineDate.length <= 11) {
+                dueDate = arr[i].NextDeadlineDate;
+                deadlineDate = new Date(arr[i].NextDeadlineDate).toLocaleDateString();
+            }
+            else {
+                var dateArr = arr[i].NextDeadlineDate.split(" ");
+                dueDate = arr[i].NextDeadlineDate.substring(1, 11);
+                deadlineDate = new Date(dateArr[0]).toLocaleDateString();
+            }
+        }
+        else if(arr[i] != undefined){
+            dueDate = "Continuous Submission/Contact the Program Officer";
+            count++;
+        }
+        if (dueDate != "Continuous Submission/Contact the Program Officer") {
+            if (dueDate!="" && Date.parse(dueDate) > Date.parse(today) || dueDate == "Continuous Submission/Contact the Program Officer") {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
+function getDueDate(arr) {
+    var dueDate = "";
+    if (arr.NextDeadlineDate != null) {
+        if (arr.NextDeadlineDate.length <= 11) {
+            dueDate = arr.NextDeadlineDate;
+            deadlineDate = new Date(arr.NextDeadlineDate).toLocaleDateString();
+        }
+        else {
+            dueDate = arr.NextDeadlineDate.substring(1, 11);
+        }
+    } else {
+        dueDate = "Continuous Submission/Contact the Program Officer";
+    }
+    return dueDate;
+}
 
 function getAccordiationData(funding_data) {
 
@@ -121,48 +167,48 @@ function getAccordiationData(funding_data) {
         }
 
         if (distinctCategories[k] == 'NSF') {
-            length = NSF_arr.length;
+            length = setNoOfSoils(NSF_arr);
             arr = NSF_arr;
             img_url = "assets/logos-funding-opportunities/nsf.png";
         }
 
         if (distinctCategories[k] == 'NOAA') {
-            length = NOAA_arr.length;
+            length = setNoOfSoils(NOAA_arr)
             arr = NOAA_arr;
             img_url = "assets/logos-funding-opportunities/noaa_logo.png";
 
 
         }
         if (distinctCategories[k] == 'NIH') {
-            length = NIH_arr.length;
+            length = setNoOfSoils(NIH_arr);
             arr = NIH_arr;
             img_url = "assets/logos-funding-opportunities/NIH-logo.png";
 
 
         }
         if (distinctCategories[k] == 'DOE') {
-            length = DOE_arr.length;
+            length = setNoOfSoils(DOE_arr);
             arr = DOE_arr;
             img_url = "assets/logos-funding-opportunities/doe.png";
 
 
         }
         if (distinctCategories[k] == 'NASA') {
-            length = NASA_arr.length;
+            length = setNoOfSoils(NASA_arr);
             arr = NASA_arr;
             img_url = "assets/logos-funding-opportunities/nasa.png";
 
 
         }
         if (distinctCategories[k] == 'Federal - Others') {
-            length = federal_arr.length;
+            length = setNoOfSoils(federal_arr);
             arr = federal_arr;
             img_url = "assets/logos-funding-opportunities/SPIN_logo.png";
 
         }
 
         if (distinctCategories[k] == 'Others') {
-            length = others.length;
+            length = setNoOfSoils(others);
             arr = others;
             img_url = "assets/logos-funding-opportunities/SPIN_logo.png"
 
@@ -220,6 +266,24 @@ let generateFederalAccordionContent = function (arr, img_url, funding_name) {
             }
         }   
         return deadlineDate_a-deadlineDate_b;
+    });
+
+    arr.sort(function( a, b ){
+        a_duedate = getDueDate(a);
+        b_duedate = getDueDate(b);
+        if(a_duedate.length <=11 && b_duedate.length <= 11){
+            if ( Date.parse(a_duedate) < Date.parse(b_duedate)){
+                return -1;
+            }
+            if ( Date.parse(a_duedate) > Date.parse(b_duedate)){
+                return 1;
+            }
+        }else{
+            if(b_duedate.length >11){
+                return -1;
+            }
+        }
+        return 0;
     });
 
     for (let i = 0; i < arr.length; i++) {
@@ -298,28 +362,34 @@ let generateFederalAccordionContent = function (arr, img_url, funding_name) {
         }
         var description = arr[i].synopsis.replace(/<[^>]*>/g, '');
         if (dueDate != "Continuous Submission/Contact the Program Officer") {
-            if (dueDate > today) {
+            if (Date.parse(dueDate) > Date.parse(today)) {
                 flag = true;
                 dueDate = deadlineDate;
             }
         }
         let imageElement = (arr[i].logo == '') ? '' : '<div class = "col-xl-2 col-lg-3"><img class = "agency-logo" src = "' + img_url + '" /></div>';
-        content = content + '<div class = "display-flex opportunity-container search-container">' + imageElement +
-            '<div class = "col-xl-10 col-lg-9">' + '<h4 class = "opp-header black-content-header-no-margin">' + arr[i].prog_title + '</h4>' + '<div class = "opp-details display-flex">' +
-
-            '<div class = "col-sm-12 col-md-12 col-lg-12 col-xl-6">' +
-            '<i class="fas fa-flag"></i> <strong>Agency Name: </strong>' + arr[i].spon_name +
-            '<br>' +
-            '<i class="fas fa-dollar-sign"></i> <strong>Estimated Funding: </strong>' + Estimated_Funding +
-            '<br>' +
-            '</div><div class = "col-sm-12 col-md-12 col-lg-12 col-xl-6">' +
-            '<i class="fas fa-calendar-day"></i> <strong>Date: </strong>' + dueDate +
-            '<br></div></div></div>' +
-            '<p class = "opp-description">' + description + '</p>';
-        if (arr[i].deadline_note != null) {
-            content += buildduedatenote(arr[i].deadline_note);
+        if(flag){
+            content = content + '<div class = "display-flex opportunity-container search-container">' + imageElement +
+                '<div class = "col-xl-10 col-lg-9">' + '<h4 class = "opp-header black-content-header-no-margin">' + arr[i].prog_title + '</h4>' + '<div class = "opp-details display-flex">' +
+    
+                '<div class = "col-sm-12 col-md-12 col-lg-12 col-xl-6">' +
+                '<i class="fas fa-flag"></i> <strong>Agency Name: </strong>' + arr[i].spon_name +
+                '<br>' +
+                '<i class="fas fa-dollar-sign"></i> <strong>Estimated Funding: </strong>' + Estimated_Funding +
+                '<br>' +
+                '</div><div class = "col-sm-12 col-md-12 col-lg-12 col-xl-6">' +
+                '<i class="fas fa-calendar-day"></i> <strong>Date: </strong>' + dueDate +
+                '<br></div></div></div>' +
+                '<p class = "opp-description">' + description + '</p>';
+            if (arr[i].deadline_note != null) {
+                content += buildduedatenote(arr[i].deadline_note);
+            }
+            if(arr[i].programurl != null){
+                content += '<p class="width100" style="padding-left: 15px;"><button type = "button" class = "details-button" onclick = "window.open(\'' + arr[i].programurl + '\',\'_blank\')">View Details</button></p></div>';
+            }else{
+                content += '</div>';
+            }
         }
-        content += '<p class="width100"><button type = "button" class = "details-button" onclick = "location.href = \'' + arr[i].programurl + '\'">View Details</button></p></div>';
     }
     return content;
 }
@@ -358,6 +428,14 @@ let checkFileExists = function (url) {
     } else {
         return true;
     }
+}
+
+function join(t, a, s) {
+    function format(m) {
+       let f = new Intl.DateTimeFormat('en', m);
+       return f.format(t);
+    }
+    return a.map(format).join(s);
 }
 
 var parseData = function (p) {

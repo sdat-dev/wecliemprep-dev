@@ -117,4 +117,5 @@ Primary use:    funding-opportunity.css file used for styling funding
 
 .width100{
     width: 100%;
+    padding-left: 15px;
 }
