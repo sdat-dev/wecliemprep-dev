@@ -479,7 +479,7 @@ Primary use:    Common.css file used for styling header and
     }
 }
 
-@media only screen and (max-width: 600px) {
+/* @media only screen and (max-width: 600px) {
     #landing-page-text-wrapper {
         bottom: 10%;
         width: 35%;
@@ -507,7 +507,7 @@ Primary use:    Common.css file used for styling header and
     .content>#search-box-results {
         margin-bottom: 30px;
     }
-}
+} */
 
 @media only screen and (min-width: 600px) {
     #landing-page-text-wrapper {
@@ -533,6 +533,81 @@ Primary use:    Common.css file used for styling header and
     }
     .content>#search-box-results {
         margin-bottom: 30px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    #landing-page-text-wrapper {
+        bottom: 10%;
+        width: 35%;
+    }
+    #landing-page-text-wrapper>h1 {
+        font-size: 4vw;
+    }
+    #landing-page-text-wrapper>p {
+        display: none;
+    }
+    #landing-logo-wrapper {
+        bottom: 10%;
+        width: 20%;
+    }
+    #landing-page-text-wrapper-home {
+        bottom: 10%;
+        left: 10px;
+        top: 10px;
+        width: 35%;
+    }
+    #landing-page-text-wrapper-home>h1 {
+        font-size: 5vw;
+    }
+    #landing-page-text-wrapper-home>p {
+        display: none;
+    }
+    #landing-logo-wrapper {
+        bottom: 10%;
+        width: 20%;
+    }
+    .main-content {
+        padding-top: 20px;
+        float:none;
+    }
+    .main-content>ul,
+    .main-content>ol {
+        margin-left: 20px;
+    }
+    .content>#search-box {
+        margin-bottom: 5px;
+        width: 80%;
+    }
+    .content>#search-box-results {
+        margin-bottom: 30px;
+    }
+    .ualbany-logo {
+        margin-left: 5%;
+        width: 90%;
+    }
+    .body {
+        width:fit-content;
+    }
+    .header-title {
+        text-align: center;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    #navbar {
+        padding-left: 0px;
+        text-align: center;
+    }
+    .main-container {
+        text-align: center;
+        padding: 0px 20px 35px 20px;
+    }
+    .display-flex {
+        display: block;
+    }
+    .panel-title > .btn {
+        font-size: 3.1vw !important;
+        white-space: pre-wrap;
     }
 }
 

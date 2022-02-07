@@ -89,13 +89,13 @@ let buildUniversityResearcherElements = function(researchers){
         if(researchers[i].FirstName == "") //skip of there is no first name
             continue;
         let researcher = researchers[i];
-        content +='<div class = "search-container expert-info">'+
+        content +='<div id = "' + researcher.FirstName.replace(" ", "") + researcher.LastName.replace(" ", "") + '" class = "search-container expert-info">'+
         '<img class = "expert-image" src = "https://sdat-dev.github.io/resources/wecliemprep-dev/assets/images/researchers/' + researcher.Photopath +'"/>'+
         '<h2 class = "content-header-no-margin">'+ (researcher["InstitutionalPage"] == ""? researcher.FirstName + ' '+ researcher.LastName : '<a class = "no-link-decoration" href = ' + getHttpLink(researcher["InstitutionalPage"]) + '>' + researcher.FirstName + ' '+ researcher.LastName + '</a>') + '</h2>'+
         '<h5 class = "content-header-no-margin faculty-title" style = "font-size:20px;">'+ (researcher.JobTitle != ''? researcher.JobTitle + ',<br>':'') + (researcher.Department != ''? researcher.Department :'') + '</h5>' +
         generateLogoContent(researcher) +'<p class = "faculty-description"><strong>Email: </strong> <a class = "email-link" href = mailto:' + researcher.Email + 
-        '>'+ researcher.Email+ '</a><br>'+ (researcher.PhoneNumber != ""? '<strong>Phone: </strong>'+ formatPhone(researcher.PhoneNumber) + '<br>': "")+'<strong>Research Interests: </strong>'+ 
-        getResearchInterests(researcher) + '</p><p>' + researcher.ResearchExpertise +'</p>'+ generateProjectsContent([researcher["Project1"],researcher["Project2"],researcher["Project3"],researcher["Project4"],researcher["Project5"]])+
+        '>'+ researcher.Email+ '</a><br>'+ (researcher.PhoneNumber != ""? '<strong>Phone: </strong>'+ formatPhone(researcher.PhoneNumber) + '<br>': "")+ (getResearchInterests(researcher) != ""? '<strong>Research Interests: </strong>'+ 
+        getResearchInterests(researcher) + '</p>': "")+'<p>' + researcher.ResearchExpertise +'</p>'+ generateProjectsContent([researcher["Project1"],researcher["Project2"],researcher["Project3"],researcher["Project4"],researcher["Project5"]])+
         generateRelevantCourses([researcher["Course1"],researcher["Course2"],researcher["Course3"],researcher["Course4"],researcher["Course5"]]) + '</div>';
     }
     return content;
@@ -153,7 +153,7 @@ let generateRelevantCourses = function(courses){
       }
     }
     courseContent = (count > 0)?
-    '<b class = "purple-font">RELEVANT COURSES</b><ul class = "sub-list">'
+    '<b class = "purple-font">Relevant Courses</b><ul class = "sub-list">'
     + courseContent + '</ul>': '';
     return courseContent;
 }
