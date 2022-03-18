@@ -534,6 +534,12 @@ Primary use:    Common.css file used for styling header and
     .content>#search-box-results {
         margin-bottom: 30px;
     }
+    .dropdown.top-nav {
+        display: none;
+    }
+    #side-menu {
+        display: block;
+    }
 }
 
 @media only screen and (max-width: 600px) {
@@ -609,6 +615,12 @@ Primary use:    Common.css file used for styling header and
         font-size: 3.1vw !important;
         white-space: pre-wrap;
     }
+    .dropdown.top-nav {
+        display: block;
+    }
+    #side-menu {
+        display: none;
+    }
 }
 
 @media only screen and (max-width: 767px) {
@@ -644,6 +656,10 @@ Primary use:    Common.css file used for styling header and
     }
     .content>#search-box-results {
         margin: 0px 0px 20px 0px;
+    }
+    .navbar .container, .navbar .container-fluid, .navbar .container-lg, .navbar .container-md, .navbar .container-sm, .navbar .container-xl {
+        display : block;
+        padding-bottom : 15px;
     }
 }
 

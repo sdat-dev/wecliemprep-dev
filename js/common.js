@@ -1,10 +1,75 @@
-let sidemenuItems = [{"item":"About","link":"about.html"},{"item":"Academic Founders","link":"academicfounders.html"},{"item":"Leadership Team","link":"leadershipteam.html"},{"item":"Funder Toolkit","link":"fundertoolkit.html","subItems":[{"item":"Funding Opportunity","link":"fundingopportunity.html"},{"item":"Proposal Preparation","link":"proposalpreparation.html"},{"item":"Library Resources","link":"libraryresources.html"},{"item":"Video Resources","link":"videoresources.html"},{"item":"Talk to a Program Officer","link":"talktoaprogramofficer.html"}]},{"item":"Researchers","link":"researchers.html"},{"item":"Industry Members","link":"industrymembers.html"},{"item":"Priorities","link":"priorities.html"},{"item":"Fall 2022 Conference","link":"fall2022conference.html"}]
+let sidemenuItems = [{"item":"About","link":"about.html"},{"item":"Academic Founders","link":"academicfounders.html"},{"item":"Leadership Team","link":"leadershipteam.html"},{"item":"Funder Toolkit","link":"fundertoolkit.html","subItems":[{"item":"Funding Opportunity","link":"fundingopportunity.html"},{"item":"Proposal Preparation","link":"proposalpreparation.html"},{"item":"Library Resources","link":"libraryresources.html"},{"item":"Video Resources","link":"videoresources.html"},{"item":"Talk to a Program Officer","link":"talktoaprogramofficer.html"}]},{"item":"Researchers","link":"researchers.html"}]
 //SideMenu Start
 //What evet written  before '//SideMenu Start' will be relace with sidemenuItems in automation scripts
 
 
 let addsidemenu = function (page, markactive = true, extraindirection = false) {
     let sidemenu = document.getElementById('side-menu');
+
+    for (let i = 0; i < sidemenuItems.length; i++) {
+        let item = sidemenuItems[i];
+        var addsubmenu = false;
+        if (item.hasOwnProperty('subItems')) {
+            if (item.item == page) {
+                addsubmenu = true;
+            }
+            else {
+                let subitems = item.subItems;
+                subitems.forEach(element => {
+                    if (element.item == page) {
+                        addsubmenu = true;
+                        return;
+                    }
+                });
+            }
+        }
+
+        if (addsubmenu == false) {
+            let link = '';
+            if (item.hasOwnProperty('subItems') && item.link == '#') {
+                link = item.subItems[0].link;
+            }
+            else {
+                link = item.link;
+            }
+            if(extraindirection)
+                link = '../'+ link;
+            let menuItem = document.createElement("div");
+            let menuItemContent = '<a href="' + link + '">' + item.item + '</a>';
+            menuItem.innerHTML = menuItemContent;
+            menuItem.classList.add('navigation-items');
+            menuItem.classList.add('hover-highlight');
+            if (page == item.item) {
+                menuItem.setAttribute("id", "active-page");
+            }
+            sidemenu.appendChild(menuItem);
+        }
+        else {
+            let menuItem = document.createElement("div");
+            let menuItemContent = '<a href="';
+            if(extraindirection)
+                menuItemContent += '../';
+            menuItemContent += (item.link != '#' ? item.link : subitems[0].link) + '">' + item.item + '</a>';
+            menuItem.innerHTML = menuItemContent;
+            menuItem.classList.add('navigation-items');
+            menuItem.classList.add('hover-highlight');
+
+            if (page == item.item) {
+                menuItem.setAttribute("id", "active-page");
+            }
+            sidemenu.appendChild(menuItem);
+            menuItem = document.createElement("div");
+            menuItem.classList.add('expanded-navigation-item');
+            let submenu = buildsubmenu(item.subItems, page, markactive, extraindirection);
+            menuItemContent = submenu;
+            menuItem.innerHTML = menuItemContent;
+            sidemenu.appendChild(menuItem);
+        }
+    }
+}
+
+let addsidemenu2 = function (page, markactive = true, extraindirection = false) {
+    let sidemenu = document.getElementById('side-menu2');
 
     for (let i = 0; i < sidemenuItems.length; i++) {
         let item = sidemenuItems[i];
