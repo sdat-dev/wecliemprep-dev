@@ -360,7 +360,10 @@ let generateFederalAccordionContent = function (arr, img_url, funding_name) {
                 img_url = "assets/logos-funding-opportunities/SPIN_logo.png";
             }
         }
-        var description = arr[i].synopsis.replace(/<[^>]*>/g, '');
+        var description = '';
+        if(arr[i].synopsis != null){
+            var description = arr[i].synopsis.replace(/<[^>]*>/g, '');
+        }
         if (dueDate != "Continuous Submission/Contact the Program Officer") {
             if (Date.parse(dueDate) > Date.parse(today)) {
                 flag = true;

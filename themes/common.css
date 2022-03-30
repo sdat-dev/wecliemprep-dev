@@ -520,6 +520,10 @@ Primary use:    Common.css file used for styling header and
     #side-menu {
         display: none;
     }
+
+    img {
+        max-width: 100% !important;
+    }
 }
 
 @media only screen and (min-width: 600px) {
