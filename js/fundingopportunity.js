@@ -382,7 +382,7 @@ let generateFederalAccordionContent = function (arr, img_url, funding_name) {
                 '<br>' +
                 '</div><div class = "col-sm-12 col-md-12 col-lg-12 col-xl-6">' +
                 '<i class="fas fa-calendar-day"></i> <strong>Date: </strong>' + dueDate +
-                '<br></div></div></div>' +
+                '<br></div></div></div><br><br><br><br><br><br>' +
                 '<p class = "opp-description">' + description + '</p>';
             if (arr[i].deadline_note != null) {
                 content += buildduedatenote(arr[i].deadline_note);
