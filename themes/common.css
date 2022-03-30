@@ -521,7 +521,7 @@ Primary use:    Common.css file used for styling header and
         display: none;
     }
 
-    img {
+    .content>img {
         max-width: 100% !important;
     }
 }
