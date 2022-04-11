@@ -30,7 +30,8 @@ let addSpinData = function () {
         isCrossDomain: true,
         callback: 'parseData',
         keywords: '[SOLR]keyword_exact:"Emergency Health Services" OR keyword_exact:"Climate Change" OR keyword_exact:"Weather Modification" OR keyword_exact:"Classification of Climate" OR keyword_exact:"Emergency Preparedness" OR keyword_exact:"Climate Change - Impacts" OR keyword_exact:"Climate Change - Mitigation" OR keyword_exact:"Emergency Medicine" OR keyword_exact:"Emergency Response" OR keyword_exact:"Emergency Services (Food/Shelter/Water, Etc.)" OR keyword_exact:"Extreme/Severe Weather" OR keyword_exact:"Weather"',
-        uniqueId: '801E4DCB-736C-4601-B'
+        // uniqueId: '801E4DCB-736C-4601-B' Old uniqueId(Not usable anymore)
+        uniqueId: '96967297-45E1-45FB-8'
     };
 
     let params = new URLSearchParams(data).toString();
