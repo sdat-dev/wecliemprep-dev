@@ -1,8 +1,6 @@
 window.onload = function () {
     let requestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/fundingopportunity.json";
     let datarequestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/solicitationsdata.json"; 
-    // let requestURL = "../data/researchers.json"; 
-    // let datarequestURL = "../data/solicitationsdata.json";
     let request =  axios.get(requestURL);
     let datarequest =  axios.get(datarequestURL);
     let maincontentContainer = document.getElementsByClassName('main-content')[0];
