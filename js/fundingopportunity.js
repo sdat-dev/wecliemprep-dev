@@ -1,50 +1,54 @@
-let requestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/fundingopportunity.json";
-let request = new XMLHttpRequest();
-//getting content Element to append grants information
-let maincontentContainer = document.getElementsByClassName('main-content')[0];
-request.open('GET', requestURL);
-request.responseType = 'json';
-request.send();
-request.onload = function () {
-    let content = '';
-    const webelementsjson = request.response;
-    //condition for checking if browser is Internet Explorer
-    let webelements = ((false || !!document.documentMode)) ? JSON.parse(webelementsjson) : webelementsjson;
-    let contentElement = document.createElement('div');
-    contentElement.classList.add('content');
-    contentElement.innerHTML = getContent(webelements);
-    maincontentContainer.appendChild(contentElement);
-    addfooter();
-    addSpinData();
+window.onload = function () {
+    let requestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/fundingopportunity.json";
+    let datarequestURL = "https://sdat-dev.github.io/resources/wecliemprep-dev/data/solicitationsdata.json"; 
+    // let requestURL = "../data/researchers.json"; 
+    // let datarequestURL = "../data/solicitationsdata.json";
+    let request =  axios.get(requestURL);
+    let datarequest =  axios.get(datarequestURL);
+    let maincontentContainer = document.getElementsByClassName('main-content')[0];
+    axios.all([request, datarequest]).then(axios.spread((...responses) => {
+        let solicitationscontent =  responses[0].data;
+        let solicitations = responses[1].data;
+        let webelements = solicitationscontent;
+        let content = getContent(webelements);
+        let contentElement = document.createElement('div');
+        contentElement.classList.add('content');
+        contentElement.innerHTML = content.trim();
+        maincontentContainer.appendChild(contentElement);
+        addfooter();
+        // addSpinData();
+        parseData(solicitations);
+        clearsearch();
+    }))
 }
 
-let addSpinData = function () {
-    let spinURL = "https://spin.infoedglobal.com/Service/ProgramSearch";
-    var data = {
-        PublicKey: "96183961-68B2-4B14-AEA3-376E734380CD",
-        InstCode: "SUNYALB",
-        signature: "97707afe4847b9862f27c9ce80a9cb6e",
-        responseFormat: 'JSONP',
-        pageSize: 3000,
-        columns: ["synopsis", "id", "spon_name", "NextDeadlineDate", "total_funding_limit", "programurl", "sponsor_type", "prog_title", "revision_date", "deadline_note"],
-        isCrossDomain: true,
-        callback: 'parseData',
-        keywords: '[SOLR]keyword_exact:"Emergency Health Services" OR keyword_exact:"Climate Change" OR keyword_exact:"Weather Modification" OR keyword_exact:"Classification of Climate" OR keyword_exact:"Emergency Preparedness" OR keyword_exact:"Climate Change - Impacts" OR keyword_exact:"Climate Change - Mitigation" OR keyword_exact:"Emergency Medicine" OR keyword_exact:"Emergency Response" OR keyword_exact:"Emergency Services (Food/Shelter/Water, Etc.)" OR keyword_exact:"Extreme/Severe Weather" OR keyword_exact:"Weather"',
-        // uniqueId: '801E4DCB-736C-4601-B' Old uniqueId(Not usable anymore)
-        uniqueId: '96967297-45E1-45FB-8'
-    };
+// let addSpinData = function () {
+//     let spinURL = "https://spin.infoedglobal.com/Service/ProgramSearch";
+//     var data = {
+//         PublicKey: "96183961-68B2-4B14-AEA3-376E734380CD",
+//         InstCode: "SUNYALB",
+//         signature: "97707afe4847b9862f27c9ce80a9cb6e",
+//         responseFormat: 'JSONP',
+//         pageSize: 3000,
+//         columns: ["synopsis", "id", "spon_name", "NextDeadlineDate", "total_funding_limit", "programurl", "sponsor_type", "prog_title", "revision_date", "deadline_note"],
+//         isCrossDomain: true,
+//         callback: 'parseData',
+//         keywords: '[SOLR]keyword_exact:"Emergency Health Services" OR keyword_exact:"Climate Change" OR keyword_exact:"Weather Modification" OR keyword_exact:"Classification of Climate" OR keyword_exact:"Emergency Preparedness" OR keyword_exact:"Climate Change - Impacts" OR keyword_exact:"Climate Change - Mitigation" OR keyword_exact:"Emergency Medicine" OR keyword_exact:"Emergency Response" OR keyword_exact:"Emergency Services (Food/Shelter/Water, Etc.)" OR keyword_exact:"Extreme/Severe Weather" OR keyword_exact:"Weather"',
+//         // uniqueId: '801E4DCB-736C-4601-B' Old uniqueId(Not usable anymore)
+//         uniqueId: '96967297-45E1-45FB-8'
+//     };
 
-    let params = new URLSearchParams(data).toString();
-    let final_url = spinURL + '?' + params;
+//     let params = new URLSearchParams(data).toString();
+//     let final_url = spinURL + '?' + params;
 
-    $.ajax({
-        url: final_url,
-        dataType: 'jsonp',
-        success: function (dataWeGotViaJsonp) {
-            console.log(dataWeGotViaJsonp);
-        }
-    });
-}
+//     $.ajax({
+//         url: final_url,
+//         dataType: 'jsonp',
+//         success: function (dataWeGotViaJsonp) {
+//             console.log(dataWeGotViaJsonp);
+//         }
+//     });
+// }
 
 function setNoOfSoils(arr) {
     let a = [{day: 'numeric'}, {month: 'short'}, {year: 'numeric'}];
@@ -112,8 +116,8 @@ function getAccordiationData(funding_data) {
         var length = 0;
         var img_url = "";
         var arr = [];
-        for (var j = 0; j < funding_data.Programs.length; j++) {
-            var programs_value = funding_data.Programs[j];
+        for (var j = 0; j < funding_data.length; j++) {
+            var programs_value = funding_data[j];
 
             if (programs_value.spon_name.includes('NSF') ||
                 programs_value.spon_name.includes('National Science Foundation') ||
@@ -231,7 +235,7 @@ function getAccordiationData(funding_data) {
     let accordionElement = document.getElementById('fundingopps');
     accordionElement.classList.add('accordion-container');
     accordionElement.innerHTML = content.trim();
-    maincontentContainer.appendChild(accordionElement);
+    // maincontentContainer.appendChild(accordionElement);
     result = true;
     return result;
 }
@@ -444,11 +448,11 @@ function join(t, a, s) {
 
 var parseData = function (p) {
     data = p;
-    if (p.ErrorType != null) {
-        if ($('#waiter').is(':visible')) $('#waiter').hide();
-        alert(p.ErrorType + '\n' + p.ErrorMessage);
-        return;
-    }
+    // if (p.ErrorType != null) {
+    //     if ($('#waiter').is(':visible')) $('#waiter').hide();
+    //     alert(p.ErrorType + '\n' + p.ErrorMessage);
+    //     return;
+    // }
     
     if(getAccordiationData(p))
         $('#waiter').hide();
